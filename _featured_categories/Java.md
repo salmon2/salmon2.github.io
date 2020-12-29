@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Favorites
-slug: favorites
+title: Java
+slug: java
 menu: true
 submenu: false
-order: 5
+order: 3
 description: >
-  좋아하는 것
+  Java  
 ---
