@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Unclassified
-slug: unclassified
+title: Algorithm
+slug: algorithm
 menu: true
 submenu: false
 order: 5
 description: >
-  기타 문서.
+  알고리즘
 ---
