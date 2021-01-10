@@ -8,8 +8,8 @@ tags: [spring, solid]
 ## 목차
 
 [1. solid란?](#solid-란?)
-2. 예제 코드 보기
-3. solid 확인하기
+[2. 예제 코드 보기](#예제-코드-보기)
+[3. solid 확인하기](#solid-확인하기)
 
 ---
 ## solid 란?
@@ -64,14 +64,73 @@ tags: [spring, solid]
 경이 아주 어려워진다.
 
 ---
-## 예제 코드
+## 예제 코드 보기
 ---
 
 ### 회원 등록 
 #### 회원 도메인 클래스 다이어그램
-![그림 1](./assets/img/spring/class.png)
+![class](https://user-images.githubusercontent.com/23234577/104121071-fec15580-537e-11eb-94ed-429044b2a570.png)
 
+```MemberServiceImpl``` 은 ```MemberService```를 구현한 구현 객체이다. 이 객체는 다시 ```MemberRepository```를 의존하여 작동한다.
 
+#### 소스코드
+##### MemberService.interface
+```java
+public interface MemberService {
+    void join(Member member);
+
+    Member findMember(Long memberId);
+}
+```
+
+##### MemberServiceImpl.class
+```java
+public class MemberServiceImpl implements MemberService{
+
+    private final MemberRepository memberRepository = new Memory();
+
+    @Override
+    public void join(Member member) {
+        memberRepository.save(member);
+    }
+
+    @Override
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
+}
+```
+##### MemberRepository.interface
+```java
+public interface MemberRepository {
+    void save(Member member);
+
+    Member findById(Long memberId);
+
+}
+```
+
+##### Memory.class
+
+```java
+public class Memory implements MemberRepository{
+    @Override
+    public void save(Member member) {
+        ---
+    }
+
+    @Override
+    public Member findById(Long memberId) {
+       ---
+    }
+
+}
+```
+---
+## solid 확인하기
+---
+
+그렇다면 
 
 
 
