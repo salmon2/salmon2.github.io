@@ -13,13 +13,21 @@ url:                 https://salmon2.github.io
 baseurl:             ""
 
 # A very short description of your page
+<<<<<<< HEAD
 tagline:             "All roads lead to data."
+=======
+tagline:             ""
+>>>>>>> 1ad99d654187cc5106bacf25371921cf9444a56e
 
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         >
+<<<<<<< HEAD
   Data science enthusiast and addict :)
 
+=======
+  흠흠흠
+>>>>>>> 1ad99d654187cc5106bacf25371921cf9444a56e
 # This should be the same author as first entry in `_data/authors.yml`
 author:
   name:              salmon2
