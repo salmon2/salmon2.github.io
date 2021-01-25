@@ -80,4 +80,9 @@ BeanDefinition 을 빈 설정 메타정보라 한다.
 
 ![그림3](https://media.vlpt.us/images/happykimnh/post/5e76919b-d992-42fb-8aef-db1ddc30fdb6/image.png)
 
+- ```AnnotationConfigApplicationContext```은 ```AnnoatatedBeanDefinitionReader```를 통하여 AppConfig.class 파일을 읽어 ```BeanDefiniton```파일을 생성한다.
+- ```GenericXmlApplicationContext``` 는 ```XmlBeanDefinitionReader``` 를 사용해서 ```appConfig.xml``` 설정
+정보를 읽고 ```BeanDefinition``` 을 생성한다.
+- 새로운 형식의 설정 정보가 추가되면, ```XxxBeanDefinitionReader```를 만들어서 ```BeanDefinition``` 을 생성 하면 된다.
 
+스프링은 다양한 형태의 설정 정보를 ```BeanDefinition``으로 추상화하여 사용한다.
