@@ -1,6 +1,6 @@
 ---
 layout: post
-title: java week 7
+title: singletone
 category: java
 tags: [java, week 7, package]
 ---

@@ -2,7 +2,7 @@
 layout: post
 title: ApplicationContext
 category: spring
-tags: [spring, ApplicationContext]
+tags: [spring]
 ---
 ## BeanFactory와 ApplicationContext
 ---
