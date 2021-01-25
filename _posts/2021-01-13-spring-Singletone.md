@@ -146,10 +146,8 @@ public MemberRepository memberRepository() {
 @Configuration이 없담면 class로 인식하여 AppConfig가 class로 등록되고
 ```bean = class hello.core.AppConfig``` 하위 빈들 또한 새로운 객체를 만들어서 의존성을 부여하게 된다.
 
----
 - @Bean만 사용해도 스프링 빈으로 등록되지만, 싱글톤을 보장하지 않는다.
 - 싱글톤으로 보장받기위해서는 @Configuration이 필요하다.
----
 
 
 
