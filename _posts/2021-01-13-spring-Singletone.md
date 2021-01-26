@@ -1,8 +1,8 @@
 ---
 layout: post
 title: singletone
-category: java
-tags: [java, week 7, package]
+category: spring
+tags: [singleton, spring]
 ---
 
 # 스프링의 싱글톤 컨테이너
