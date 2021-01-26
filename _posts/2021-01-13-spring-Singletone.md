@@ -1,15 +1,19 @@
 ---
 layout: post
 title: singletone
-category: java
-tags: [java, week 7, package]
+category: spring
+tags: [singleton, spring]
 ---
 
 # 스프링의 싱글톤 컨테이너
 
 ---
 ## 목차
-
+- 스프링의 싱글톤
+- 싱글톤 패턴
+- 싱글톤 컨테이너
+- 싱글톤 방시의 주의점
+- @Configuration과 싱글톤 생성방식
 ---
 
 ## 스프링의 싱글톤
