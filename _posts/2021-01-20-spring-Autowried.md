@@ -1,6 +1,6 @@
 ---
 layout: post
-title: autowired
+title: Autowried
 category: spring
 tags: [spring]
 ---
