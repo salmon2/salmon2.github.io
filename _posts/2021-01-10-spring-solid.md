@@ -4,12 +4,13 @@ title: solid와 객체지향설계
 category: spring
 tags: [spring, solid]
 ---
-
 ## 목차
+---
+- [1. solid란?](#solid-란?)
 
-[1. solid란?](#solid-란?)
-[2. 예제 코드 보기](#예제-코드-보기)
-[3. solid 확인하기](#solid-확인하기)
+- [2. 예제 코드 보기](#예제-코드-보기)
+
+- [3. solid 확인하기](#solid-확인하기)
 
 ---
 ## solid 란?
