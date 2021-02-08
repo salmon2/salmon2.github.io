@@ -137,3 +137,9 @@ tipue_search:
     categories: []
     tags: []
     
+defaults:
+  - scope:
+      path: "assets/img"
+    values:
+      image: true
+    
