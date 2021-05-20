@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Favorites
-slug: favorites
+title: C++
+slug: c++
 menu: true
 submenu: false
 order: 5
 description: >
-  좋아하는 것
+  c++ 코테 관련 기본 문법
 ---
