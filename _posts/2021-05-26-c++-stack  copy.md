@@ -1,128 +1,81 @@
 ---
 layout: post
-title: Vector
+title: stack
 category: c++
-tags: [c++, vector]
+tags: [c++, stack]
 ---
+
 ## 목차
--  vector container 란?
--  1차원 vector의 선언
--  2차원 vector의 선언
--  vector의 iterator
--  vector의 사용
+-  c++ stack 이란?
+-  stack의 선언
+-  stack 기본 함수
 
 
 ---
 
-## vector container 란? 
+## c++ stack 이란?
 
 ---
-C++ 표준 템플릿 라이브러리 중의 하나인 템플릿 클래스이며, 동적 배열 구조를 C++로 구현한 것이다.
+스택은 자주 사용되는 자료구조 중 하나로 LIFO( Last In First Out)의 특징을 가지고 있습니다.
 
-이것은 C의 배열(빠른 랜덤 접근이 가능한)처럼 행동하지만 자동으로 배열의 크기 조절과 객체의 추가와 삭제가 가능하다.
-
----
-## 1차원 vector의 선언
+c++ STL 스택 라이브러리를 통하여 push, pop, size, empty 등등 여러 함수들을 간편하게 사용할 수 있습니다.
 
 ---
-### 1차원 vector의 선언
+## stack의 선언
+
+---
 ```cpp
-    #include<vector>
+    #include<stack>
     using namespace std;
 
-    vector<int> v;              //int형 vector 생성 
-                                //[]
+    stack<int> st_int;      //int 형 stack 생성
 
-    vector<int> v(4);           //int형 vector 생성 후 크기 4만큼 할당
-                                //[0, 0, 0, 0]
-
-    vector<int> v(4,2)          //int형 vector 생성 후 크기 4만큼 모든 값 2 할당
-                                //[2, 2, 2, 2]
-
-    vector<int> v = { 1, 2, 3 } // 백터 생성 후 오른쪽 변수 값으로 초기화
-                                // [1, 2, 3]
+    stack<char> st_int;      //char 형 stack 생성
 
 ```
 ---
-## 2차원 vector의 선언
+## stack 기본 함수
 
 ---
 ```cpp
-   
-    #include<vector>
+
+    #include<stack>
     using namespace std;
 
-    vector< vector <int> >v (5, vector<int>(3, 0));     //5,3 사이즈의 2차원 배여 선언
-                                                        //[
-                                                        //[0, 0, 0],
-                                                        //[0, 0, 0],
-                                                        //[0, 0, 0],
-                                                        //[0, 0, 0],
-                                                        //[0, 0, 0]
-                                                        //]
-    vector<vector<int> > arr({                          //간단한 2차원 배열 만들기
-        vector<int>( { 0, 1, 2 }),
+    int main(){
+ 
+    stack<int> stack; //int type stack create
+ 
+    stack.push(4); //push 4, 5, 6 to stack
+    stack.push(5);
+    stack.push(6);
+ 
+    cout << "stack size : " << stack.size() <<endl; //stack size
+ 
+    cout << stack.top() <<endl; //get top element of stack
+    stack.pop();    // remove top element of stack
+ 
+    cout <<stack.top() <<endl;
+    stack.pop();
+ 
+    cout << stack.top() <<endl;
+    stack.pop();
 
-        vector<int>( { 3, 7, 9, 11 }),
+    stack.push(4); //push 4, 5, 6 to stack
+    stack.push(5);
+    stack.push(6);
 
-        vector<int>( { 4, 10, 14, 15 }),
+    for(int i = 0; i < stack.size(); i++){              // 4, 5, 6 출력
+        cout << stack.top() <<endl;
+        stack.pop();
+    }
 
-        vector<int>( { 0, 4, 5, 6, 7 })
-    });
+    if(stack.empty()){ // check if stack is empty
+        cout << "stack is empty " <<endl;
+    }
+ 
+    return 0;
+}
+
+
 ```
----
-## vector의 iterator
-
----
-```cpp
-    v.begin()   //백터 시작점의 주소 값 반환
-
-    v.end()     //백터 (끝부분 + 1) 주소값 반환
-```
-
-
-
----
-## vector의 사용
-
----
-
-```cpp
-    #include<vector>
-    using namespace std;
-
-    vector<int> one(4);                             // [0, 0, 0, 0]
-
-    vector< vector<int> > two(3, vector<int>(5));   //[[0, 0, 0, 0, 0]
-                                                    // [0, 0, 0, 0, 0]
-                                                    // [0, 0, 0, 0, 0]]
-
-    //1. 새로운 값으로 초기화
-    one[0] = 1;                                     // [1, 0, 0, 0]
-    two[0][0] = 1;                                  //[[1, 0, 0, 0, 0]
-                                                    // [0, 0, 0, 0, 0]
-                                                    // [0, 0, 0, 0, 0]]
-
-    //2. 마지막 원소 뒤에 값 추가하기
-    one.push_back(5);                               // [1, 0, 0, 0, 5]
-    two[0].push_back(5);                            //[[1,0,0,0,0,5]
-                                                    // [0,0,0,0,0]
-                                                    // [0,0,0,0,0]]
-    //3. 중간에 원소 삽입하기
-    one.insert(one.begin()+2, 3, 4)                 //2번 인덱스에 3개의 4 추가하기
-                                                    // [1, 0, 4, 4, 4, 0, 0, 5]
-    //4. 중간에 원소 삭제하고 뒤에 값 땡기기
-    one.erase(one.begin() + 1)                      // 1번 인덱스 삭제 후 뒤에 값 땡김
-                                                    //[1, 4, 4, 4, 0, 0, 5]
-
-    //5. size 측정
-    one.size()                                      //7
-    two.size()                                      //3
-    two[0].size()                                   //[1,0,0,0,0,5] -> 6
-
-    //7. sort 사용하기  퀵 정렬 기반
-    #include<algorithm>
-    sort(one.begin(), one.end(), greater<int>());   //내림차순
-    sort(one.begin(), one.end(), less<int>());      //오름차순
-```
-
