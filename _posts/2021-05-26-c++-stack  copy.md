@@ -4,7 +4,6 @@ title: Vector
 category: c++
 tags: [c++, vector]
 ---
-
 ## 목차
 -  vector container 란?
 -  1차원 vector의 선언
@@ -26,6 +25,7 @@ C++ 표준 템플릿 라이브러리 중의 하나인 템플릿 클래스이며,
 ## 1차원 vector의 선언
 
 ---
+### 1차원 vector의 선언
 ```cpp
     #include<vector>
     using namespace std;
@@ -119,14 +119,6 @@ C++ 표준 템플릿 라이브러리 중의 하나인 템플릿 클래스이며,
     one.size()                                      //7
     two.size()                                      //3
     two[0].size()                                   //[1,0,0,0,0,5] -> 6
-
-    //6 최대값, 최솟값, 인덱스 찾기
-    int min = *min_elements(one.begin(), one.end());
-    int max = *max_elements(one.begin(), one.end());
-
-    int min_index = min_elements(one.begin(), one.end()) - one.begin();
-    int max_index = max_elements(one.begin(), one.end()) - one.begin();
-    
 
     //7. sort 사용하기  퀵 정렬 기반
     #include<algorithm>
