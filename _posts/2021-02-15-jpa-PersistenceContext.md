@@ -1,12 +1,13 @@
 ---
 layout: post
-title: java week 13
-category: java
+title: 엔티티
+category: jpa
 tags: [java]
 ---
 ## 목차
 - [엔티티](#엔티티)
-
+- [영속성 컨테이너](#영속성-컨테이너)
+- [엔티티 매니저 팩토리와 앤티티 매니저](엔티티-매니저-팩토리와-앤티티-매니저)
 
 ---
 ## 엔티티

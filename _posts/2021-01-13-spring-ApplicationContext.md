@@ -85,4 +85,4 @@ BeanDefinition 을 빈 설정 메타정보라 한다.
 정보를 읽고 ```BeanDefinition``` 을 생성한다.
 - 새로운 형식의 설정 정보가 추가되면, ```XxxBeanDefinitionReader```를 만들어서 ```BeanDefinition``` 을 생성 하면 된다.
 
-스프링은 다양한 형태의 설정 정보를 ```BeanDefinition``으로 추상화하여 사용한다.
+스프링은 다양한 형태의 설정 정보를 ```BeanDefinition```으로 추상화하여 사용한다.
