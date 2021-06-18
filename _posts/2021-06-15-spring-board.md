@@ -155,7 +155,7 @@ parameterTyp : 맵핑한 함수의 파라미터의 타입명을 매칭
 ex) parameterTyp="Long"
 
 ---
-## 게시글 리스트 보기
+## controller와 service 그리고 View
 
 ---
 ### BoardController
@@ -233,14 +233,525 @@ public class BoardController {
 
 ![그림](/assets/img/spring/board/03.png)
 
+### service
+
+서비스 계층은 보통 리포지토리 계층에서 불러온 데이터에 추가적인 논리작업을 시행한다. 그러나 이 프로젝트에서는 간단한 CRUD만을 작업한다.
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+
+    public int boardCount(){
+        return boardMapper.boardCount();
+    }
+    public List<Board> boardList(){
+        return boardMapper.findAll();
+    }
+
+    public Board findById(Long boardId){
+        return boardMapper.findById(boardId);
+    }
+
+    @Transactional
+    public Long add(Board board) {
+        boardMapper.save(board);
+        return board.getBoardId();
+    }
+
+    @Transactional
+    public Long update(Board board){
+        return boardMapper.update(board);
+    }
+
+    public void deleteById(Long boardId) {
+        boardMapper.delete(boardId);
+    }
+}
+```
+서비스 게층을 뜻하는 @Service 어노테이션을 달며, 기본적으로 모든 함수는 Transcatioanl을 read로 사용하고 db에 저장하는 함수는
+각각 따로 false로 달아준다.
 
 
-- 기술스택
-- 프로젝트 생성하기
-- DB 연결하기
-- mybatis 연결하기
-- 게시글 리스트 보기(R)
-- 게시글 자세히 보기(R)
-- 게시글 생성하기(C)
-- 게시글 수정하기(U)
-- 게시글 삭제하기(D)
+![그림](/assets/img/spring/board/04.jpg)
+
+controller는 servcie계층을 가지며 service계층은 repository(dao, mapper)계층을 가지고 있다.
+모든 연결은 controller에서부터 시작하며 controller에서 service로 데이터를 요청하고 요청한 데이터를 필두로
+동적으로 페이지를 작성한다.
+
+---
+## 게시글 리스트 보기
+
+---
+### controller
+하위 문서의 uri는 기본적으로 ("/boards")를 포함한다.
+
+```java
+@Controller
+@RequestMapping("/boards")
+@RequiredArgsConstructor
+public class BoardController {
+
+    private final BoardService boardService;
+
+    @GetMapping
+    public String main(Model model){
+        model.addAttribute("boards", boardService.boardList());
+
+        return "/board/boards";
+    }
+}
+
+
+```
+Get boards url이 들어온다면 boardService의 boardList 함수를 실행하고 리턴값을 boards라는 key값을 담은 뒤 resources/templete/board/boards.html 파일을 실행한다.
+### view
+#### boards.html
+```html
+ <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>글쓴이</th>
+                <th>제목</th>
+                <th>조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boards}">
+                <td><a href="board.html" th:href="@{/boards/{boardId}(boardId=${board.boardId})}" th:text="${board.boardId}">게시글 아이디</a></td>
+                <td><a href="board.html" th:href="@{|/boards/${board.boardId}|}" th:text="${board.name}">글쓴이</a></td>
+                <td th:text="${board.title}">제목</td>
+                <td th:text="${board.read}">1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+```
+키값으로 받은 boards를 for each 문을 통하여 반복적으로 목록을 불러온다.
+
+
+
+### Servcie
+#### BoardService
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+
+    public List<Board> boardList(){
+        return boardMapper.findAll();
+    }
+}
+
+```
+
+### Repostory
+#### BoardMapper.interface
+```java
+    List<Board> findAll();
+```
+
+#### boardMapper.xml
+```xml
+<mapper namespace="com.example.blog_board.mapper.BoardMapper">
+    <select id="findAll" resultType="com.example.blog_board.domain.Board">
+        SELECT
+        *
+        FROM tbl_board;
+    </select>
+</mapper>
+```
+
+![그림](/assets/img/spring/board/05.png)
+
+
+---
+## 게시글 자세히 보기(R)
+
+---
+### controller
+#### BoardController.java
+```java
+@Controller
+@RequestMapping("/boards")
+@RequiredArgsConstructor
+public class BoardController {
+
+    private final BoardService boardService;
+
+    @GetMapping("/{boardId}")
+    public String board(@PathVariable long boardId, Model model){
+        model.addAttribute("board", boardService.findById(boardId));
+
+        return "/board/board";
+    }
+}
+
+```
+### view
+```xml
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>상품 상세</h2>
+    </div>
+
+    <h2 th:if="${param.status}" th:text="'저장 완료!'"></h2>
+
+
+    <div>
+        <label for="boardId">게시판 ID</label>
+        <input type="text" id="boardId" name="boardId" class="form-control"
+               value="1" th:value="${board.boardId}" readonly>
+    </div>
+
+    <div>
+        <label for="name">작성자</label>
+        <input type="text" id="name" name="name" class="form-control"
+               value="1" th:value="${board.name}" readonly>
+    </div>
+
+    <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" class="form-control"
+               value="제목1" th:value="${board.title}" readonly>
+    </div>
+    <div>
+        <label for="content">본문</label>
+        <input type="text" id="content" name="content" class="form-control"
+               value="컨텐츠" th:value="${board.content}" readonly>
+    </div>
+    <div>
+        <label for="read">조회 수</label>
+        <input type="text" id="read" name="read" class="form-control"
+               value="1" th:value="${board.read}" readonly>
+    </div>
+
+    <hr class="my-4">
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='editForm.html'"
+                    th:onclick="|location.href='@{/boards/{boardId}/edit(boardId=${board.boardId})}'|"
+                    type="button">게시글 수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='items.html'"
+                    th:onclick="|location.href='@{/boards/{boardId}/delete(boardId=${board.boardId})}'|"
+                    type="button">게시글 삭제</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='boards.html'"
+                    th:onclick="|location.href='@{/boards}'|"
+                    type="button">목록으로</button>
+        </div>
+
+    </div>
+</div> <!-- /container -->
+</body>
+</html>
+```
+### service
+#### BoardService.java
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+
+    public Board findById(Long boardId){
+        return boardMapper.findById(boardId);
+    }
+
+}
+
+```
+
+### repository
+#### boardMapper.java
+```java
+@Repository
+public interface BoardMapper{
+    Board findById(Long boardId);
+}
+```
+### boardMapper.xml
+```xml
+<select id ="findById" parameterType="Long" resultType="com.example.blog_board.domain.Board">
+    SELECT * FROM tbl_board WHERE boardId=#{boardId};
+</select>
+```
+---
+## 게시글 생성하기(R)
+
+---
+### controller
+#### boardContoller.java
+```java
+@GetMapping("/add")
+    public String add(){
+        return "/board/addForm";
+    }
+
+@PostMapping("/add")
+public String add(@RequestParam String title, @RequestParam String content,
+                    @RequestParam String name, RedirectAttributes redirectAttributes){
+    Board newBoard = new Board(title, content, name);
+    Long boardId = boardService.add(newBoard);
+    System.out.println("boardId = " + boardId);
+
+    redirectAttributes.addAttribute("boardId", boardId);
+    redirectAttributes.addAttribute("status", true);
+
+    return "redirect:/boards/{boardId}";
+}
+```
+저장하기 같은 경우 두 가지 api를 사용한다. 일단 사용자는 get boards/add 라는 url에 접속하고 board/addForm html로 접속한다.
+페이지에서 저장할 게시판 정보를 입력하고 ```게시글 등록``` 버튼 을 누르면 post boards/add url에 접속되고 정보를 토대로 db에 게시글이 저장된다.
+이때 새로고침시 post가 다시 나가며, (새로고침은 전에 사용한 url을 다시 사용한다. post가 나갔으므로 바로 f5시 post가 연속으로 나오고 같은 내용의 게시글이 다시 저장된다.) 
+이를 방지하기 위해 redirect 한다.
+
+### view
+#### addForm.xml
+```xml
+<form action="board.html" th:action  method="post">
+    <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" class="formcontrol" placeholder="제목을 입력해주세요">
+    </div>
+    <div>
+        <label for="content">본문</label>
+        <input type="text" id="content" name="content" class="form-control"
+                placeholder="본문을 입력해주세요">
+    </div>
+    <div>
+        <label for="name">글쓴이</label>
+        <input type="text" id="name" name="name" class="form-control"
+                placeholder="닉네임을 입력해주세요">
+    </div>
+
+    <hr class="my-4">
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg" type="submit">게시글 등록</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='boards.html'"
+                    th:onclick="|location.href='@{/boards}'|"
+                    type="button">취소</button>
+        </div>
+    </div>
+</form>
+```
+### service
+#### boardService.java
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+    @Transactional
+    public Long add(Board board) {
+        boardMapper.save(board);
+        return board.getBoardId();
+    }
+}
+```
+DB에 접속하여 insert 쿼리를 날리기 위해서 Transactional 어노테이션을 추가로 달아 readOnly = false로 바꾼다.
+
+### repository
+#### boardMapper.java
+```java
+@Repository
+public interface BoardMapper{
+    Long save(Board board);
+}
+```
+#### baordMapper.xml
+```xml
+<insert id ="save" parameterType="com.example.blog_board.domain.Board" useGeneratedKeys="true" keyProperty="boardId">
+    INSERT INTO tbl_board (title, content, name) VALUES (#{title}, #{content}, #{name});
+</insert>
+```
+![그림](/assets/img/spring/board/06.png)
+
+---
+## 게시글 수정하기(R)
+
+---
+### controller
+#### BoardController.java
+```java
+@Controller
+@RequestMapping("/boards")
+@RequiredArgsConstructor
+public class BoardController {
+
+    private final BoardService boardService;
+
+    @GetMapping("/{boardId}/edit")
+    public String editForm(@PathVariable Long boardId, Model model){
+        Board findBoard = boardService.findById(boardId);
+        model.addAttribute("board", findBoard);
+
+        return "board/editForm";
+    }
+
+    @PostMapping("/{boardId}/edit")
+    public String editForm(@PathVariable Long boardId, @RequestParam String title,
+                           @RequestParam String content, @RequestParam String name)
+    {
+
+        Board findBoard = boardService.findById(boardId);
+        findBoard.setTitle(title);
+        findBoard.setContent(content);
+        findBoard.setName(name);
+
+        boardService.update(findBoard);
+
+        return "redirect:/boards/{boardId}";
+    }
+}
+```
+저장하기와 마찬가지로 입력 폼으로 이동 후 post로 db내용을 수정한다. 단 수정하기 임으로 입력 폼에 추가로 기존의 게시글 정보를
+가져간다.
+
+### view
+#### editForm.xml
+```xml
+<form action="board.html" th:action method="post">
+    <div>
+        <label for="id">상품 ID</label>
+        <input type="text" id="id" name="id" class="form-control" value="1" th:value="${board.boardId}"readonly>
+    </div>
+    <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" class="formcontrol" placeholder="제목을 입력해주세요">
+    </div>
+    <div>
+        <label for="content">본문</label>
+        <input type="text" id="content" name="content" class="form-control"
+                placeholder="본문을 입력해주세요">
+    </div>
+    <div>
+        <label for="name">글쓴이</label>
+        <input type="text" id="name" name="name" class="form-control"
+                placeholder="닉네임을 입력해주세요">
+    </div>
+    <hr class="my-4">
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg" type="submit">저장
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='board.html'"
+                    th:onclick="|location.href='@{/boards/{boardId}(boardId=${board.boardId})}'|"
+                    type="button">취소</button>
+        </div>
+    </div>
+</form>
+```
+### service
+#### BoardService.java
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+    @Transactional
+    public Long update(Board board){
+        return boardMapper.update(board);
+    }
+}
+```
+### repository
+#### boardMapper.java
+```java
+@Repository
+public interface BoardMapper{
+    Long update(Board board);
+}
+```
+#### baordMapper.xml
+```xml
+<update id ="update" parameterType="com.example.blog_board.domain.Board">
+    UPDATE tbl_board
+    SET title = #{title}, content = #{content}, name = #{name}
+    WHERE boardId = #{boardId};
+</update>
+
+```
+![그림](/assets/img/spring/board/07.png)
+---
+## 게시글 삭제하기(R)
+
+---
+### controller
+#### BoardController.java
+```java
+@Controller
+@RequestMapping("/boards")
+@RequiredArgsConstructor
+public class BoardController {
+    @GetMapping("/{boardId}/delete")
+    public String deleteBoard(@PathVariable Long boardId){
+        boardService.deleteById(boardId);
+        return "redirect:/boards";
+    }
+}
+```
+삭제 후 바로 boards로 라디이렉트 한다.
+
+### service
+#### BoardService.java
+```java
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class BoardService {
+    private final BoardMapper boardMapper;
+
+    public void deleteById(Long boardId) {
+        boardMapper.delete(boardId);
+    }
+}
+```
+### repository
+#### boardMapper.java
+```java
+@Repository
+public interface BoardMapper{
+    void delete(Long boardId);
+}
+```
+#### baordMapper.xml
+```xml
+<delete id ="delete" parameterType="Long">
+    DELETE
+    FROM tbl_board
+    WHERE boardId = #{boardId};
+</delete>
+```
+![그림](/assets/img/spring/board/08.png)
+
+![그림](/assets/img/spring/board/09.png)
+
+---
+## 전체 코드
+
+---
+https://github.com/salmon2/Board-spring-mybatis
+
+---
