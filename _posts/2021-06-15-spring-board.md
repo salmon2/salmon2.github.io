@@ -31,7 +31,7 @@ DB : H2-Database
 ## 프로젝트 생성하기
 
 ---
-![그림](/assets/img/spring/01.png)
+![그림](/assets/img/spring/board/01.png)
 
 Spring Initializr를 이용하여 쉽게 관련된 라이브러리들을 설치할 수 있다.
 
