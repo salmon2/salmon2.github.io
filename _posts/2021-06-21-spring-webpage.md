@@ -165,6 +165,26 @@ Eureka server id는 ```siy-user-service```이며 등록되는 eureka 서버의 p
 ![그림](/assets/img/spring/web/26.png)
 Post Service와 마찬가지로 같은 어노테이션을 사용하였다.
 
+---
+### Post Service와 User Service의 연결
+
+---
+연결하고 싶은 service는 eureka server에 등록된 id를 통해서 연결한다.
+```FeignClient(name = "siy-user-service")``` 를통해서 User Service와 연결한다.
+User Service내 url 매핑은 User Service의 Controller 부분을 똑같이 적어주면 된다.
+단 함수의 본체는 적지 않고 선언만 한다.
+#### Post Service
+![그림](/assets/img/spring/web/89.png)
+#### User Service
+![그림](/assets/img/spring/web/90.png)
+
+위 그림처럼 ```@GetMapping``` 어노테이션의 url을 매칭해주고 ```parameter``` 또한 맞춰준다.
+#### Post Service의 RelatedUser
+![그림](/assets/img/spring/web/92.png)
+
+#### User Service의 UserProfile
+![그림](/assets/img/spring/web/91.png)
+
 
 
 ---
@@ -327,6 +347,9 @@ key 값은 username으로 username에 맞는 게시글을 리스트로 변환하
 
 ### 30. ~ 34. 각 게시글의 카테고리별 단독 조회 + ParticipantsDto
 ![그림](/assets/img/spring/web/53.png)
+![그림](/assets/img/spring/web/93.png)
+participants 의 추가적인 user 데이터는 User Service에서 가져오면 가져오는 자세한 방법은 Service계층에서 설명한다.
+
 
 ### 35 ~ 39. 각 게시글의 카테고리별 단독 조회 + ParticipantsDto + ApplicationDto
 ![그림](/assets/img/spring/web/54.png)
@@ -421,6 +444,18 @@ PostRequestToPostEntity(post, request) 함수를 db에서 가져온 데이터를
 
 ### 30. ~ 34. 각 게시글의 카테고리별 단독 조회 + ParticipantsDto
 ![그림](/assets/img/spring/web/70.png)
+Participanst는 조금 다르다 Participants에 들어가는 email, age 등의 데이터는 User Service에서 데이터를 가져와야한다.
+#### getParticipants
+![그림](/assets/img/spring/web/88.png)
+보면 for each문을 통해서 userSerivce에 접근하여 userData를 가져오고 participants set에 추가하고 있다.
+
+#### Post Service
+![그림](/assets/img/spring/web/94.png)
+
+#### User Service
+![그림](/assets/img/spring/web/95.png)
+로그를 보면 정상적으로 두 서비스가 통신을하며 데이터를 주고 받는 것을 알 수 있다.
+
 
 ### 35 ~ 39. 각 게시글의 카테고리별 단독 조회 + ParticipantsDto + ApplicationDto
 ![그림](/assets/img/spring/web/71.png)
