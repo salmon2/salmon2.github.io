@@ -15,6 +15,9 @@ tags: [web, roadmap]
 - 기본적인 프론트웹 지식
     - <a href ="/web/2021/06/28/web-html/">html</a>
     - <a href ="/web/2021/07/02/web-JS/">JavaScript</a>
+- 언어 배우기
+    - <a href ="/java/2021/05/28/java-week1/">JAVA</a>
+
 - 업데이트 예정
 
 
