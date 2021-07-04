@@ -2,7 +2,7 @@
 layout: post
 title: 백엔드 RoadMap
 category: web
-tags: [web, js, roadmap]
+tags: [web, roadmap]
 ---
 <img src = "/assets/img/web/roadmap/01.png">
 
